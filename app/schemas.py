@@ -23,6 +23,8 @@ class UserRead(SQLModel):
 class CultivoCreate(SQLModel):
     nombre: str
     tipo: Optional[str] = None
+    latitud: Optional[float] = None
+    longitud: Optional[float] = None
     fecha_registro: Optional[date] = None
 
 class TareaCreate(SQLModel):

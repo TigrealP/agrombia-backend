@@ -22,6 +22,8 @@ class Crop(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     nombre: str
     tipo: Optional[str] = None
+    latitud: Optional[float] = None
+    longitud: Optional[float] = None
     fecha_registro: Optional[datetime] = None
     user_id: int = Field(foreign_key="users.id")
 
