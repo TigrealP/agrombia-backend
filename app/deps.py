@@ -28,7 +28,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Dep
         user_id = payload.get("sub")
         if user_id is None:
             raise credentials_exception
-    except JWTError:
+    except JWTError as e:
+        print(f"DEBUG JWT ERROR: {e}")
         raise credentials_exception
 
     user = session.get(User, user_id)
