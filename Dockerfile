@@ -9,7 +9,10 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
+# Dar permisos de ejecución al script
+RUN chmod +x start.sh
+
 ENV PYTHONUNBUFFERED=1
 
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $PORT"]
+CMD ["./start.sh"]
 
