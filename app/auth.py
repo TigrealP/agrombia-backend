@@ -18,8 +18,8 @@ def get_password_hash(password: str) -> str:
 def verify_password(plain: str, hashed: str) -> bool:
     return pwd_context.verify(plain, hashed)
 
-def create_access_token(subject: int, expires_delta: timedelta = None):
-    to_encode = {"sub": subject}
+def create_access_token(subject: int | str, expires_delta: timedelta = None):
+    to_encode = {"sub": str(subject)}
     expire = datetime.utcnow() + (expires_delta if expires_delta else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
