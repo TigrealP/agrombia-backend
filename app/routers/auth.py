@@ -5,14 +5,21 @@ from app.deps import get_db
 from app.auth import get_password_hash, verify_password, create_access_token
 from app.models import User
 
+from app.schemas import UserCreate
+
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post('/register')
-def register(payload: dict, session: Session = Depends(get_db)):
-    q = session.exec(select(User).where(User.email == payload.get("email"))).first()
+def register(user_in: UserCreate, session: Session = Depends(get_db)):
+    q = session.exec(select(User).where(User.email == user_in.email)).first()
     if q:
         raise HTTPException(status_code=400, detail='Email ya registrado')
-    user = User(nombre=payload.get("nombre"), email=payload.get("email"), hashed_password=get_password_hash(payload.get("contraseña")))
+    
+    user = User(
+        nombre=user_in.nombre, 
+        email=user_in.email, 
+        hashed_password=get_password_hash(user_in.contraseña)
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
