@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlmodel import SQLModel
 from typing import Optional, List
 from datetime import date
@@ -28,7 +29,12 @@ class CultivoCreate(SQLModel):
     fecha_registro: Optional[date] = None
 
 class TareaCreate(SQLModel):
-    nombre: str
-    tipo_tarea: str
-    fecha_programada: Optional[date] = None
-    id_cultivo: int
+    titulo: str
+    descripcion: Optional[str] = None
+    fecha: Optional[datetime] = None
+    crop_id: int
+
+class ReportCreate(SQLModel):
+    tipo: str
+    descripcion: Optional[str] = None
+    fecha: Optional[datetime] = None
