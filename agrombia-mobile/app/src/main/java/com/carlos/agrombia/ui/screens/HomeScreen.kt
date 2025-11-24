@@ -1,8 +1,11 @@
 package com.carlos.agrombia.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
@@ -84,19 +87,23 @@ fun HomeScreen() {
                     }
                 }
             } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 16.dp)
                 ) {
-                    item {
+                    item(span = { GridItemSpan(2) }) {
                         Text(
                             text = "Lo último en agricultura 🇨🇴",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 8.dp)
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                     items(newsList) { news ->
-                        NewsCard(news)
+                        NewsGridCard(news)
                     }
                 }
             }
@@ -105,61 +112,60 @@ fun HomeScreen() {
 }
 
 @Composable
-fun NewsCard(news: NewsItem) {
+fun NewsGridCard(news: NewsItem) {
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = Modifier.fillMaxWidth()
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = Modifier.fillMaxWidth().height(220.dp)
     ) {
         Column {
-            // Imagen de la noticia
-            if (!news.imagen.isNullOrEmpty()) {
-                AsyncImage(
-                    model = news.imagen,
-                    contentDescription = "Imagen noticia",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
-                    contentScale = ContentScale.Crop
-                )
+            // Imagen
+            Box(
+                modifier = Modifier
+                    .weight(1f) // Ocupa la mitad superior
+                    .fillMaxWidth()
+            ) {
+                if (!news.imagen.isNullOrEmpty()) {
+                    AsyncImage(
+                        model = news.imagen,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.ExitToApp, null, tint = Color.Gray)
+                    }
+                }
             }
 
-            Column(modifier = Modifier.padding(16.dp)) {
+            // Contenido
+            Column(
+                modifier = Modifier
+                    .weight(1f) // Ocupa la mitad inferior
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     text = news.titulo ?: "Sin título",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.labelLarge, // Texto más pequeño pero bold
                     fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                
-                Spacer(modifier = Modifier.height(4.dp))
-                
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = news.fuente ?: "Fuente desconocida",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color(0xFF2E7D32),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "• ${news.fecha?.take(10) ?: ""}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.Gray
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = news.contenido ?: "No hay descripción disponible.",
-                    style = MaterialTheme.typography.bodyMedium,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.DarkGray
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                
+                Text(
+                    text = news.fuente ?: "Fuente",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1
                 )
             }
         }

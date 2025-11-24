@@ -4,14 +4,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.carlos.agrombia.data.api.RetrofitClient
 import com.carlos.agrombia.data.models.WeatherResponse
 import com.carlos.agrombia.ui.components.WeatherCard
+import com.carlos.agrombia.utils.LocationHelper
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,6 +29,41 @@ fun PublicWeatherScreen(onBackClick: () -> Unit) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val locationHelper = remember { LocationHelper(context) }
+
+    // Launcher para ubicación automática
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val isGranted = permissions.values.all { it }
+        if (isGranted) {
+            isLoading = true
+            errorMessage = null // Limpiar error previo
+            locationHelper.getCurrentLocation(
+                onLocationFound = { lat, lon ->
+                    latitud = lat.toString()
+                    longitud = lon.toString()
+                    // Auto-consultar cuando tenemos la ubicación
+                    scope.launch {
+                        try {
+                            weatherResult = RetrofitClient.api.getPublicWeather(lat, lon)
+                        } catch (e: Exception) {
+                            errorMessage = "Error al consultar API: ${e.message}"
+                        } finally {
+                            isLoading = false
+                        }
+                    }
+                },
+                onError = { msg ->
+                    isLoading = false
+                    errorMessage = msg
+                }
+            )
+        } else {
+            errorMessage = "Se necesitan permisos de ubicación."
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -48,6 +88,25 @@ fun PublicWeatherScreen(onBackClick: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium
             )
             
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    locationPermissionLauncher.launch(
+                        arrayOf(
+                            android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    )
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.LocationOn, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Consultar mi ubicación actual")
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(modifier = Modifier.fillMaxWidth()) {

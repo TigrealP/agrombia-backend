@@ -24,12 +24,13 @@ def get_agricultural_news():
         }
 
     # Parámetros de búsqueda
+    # Buscamos términos específicos del agro colombiano para evitar ruido político general
     params = {
-        "q": "(agricultura OR agro OR campesinos OR cultivos) AND colombia",
+        "q": "(café OR arroz OR papa OR ganadería OR fertilizantes OR minagricultura OR fedecafé OR campesinos) AND colombia",
         "language": "es",
         "sortBy": "publishedAt", # Las más recientes primero
         "apiKey": NEWS_API_KEY,
-        "pageSize": 10 # Traer solo 10 para no saturar
+        "pageSize": 15 # Un poco más de variedad
     }
 
     try:

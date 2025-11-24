@@ -11,14 +11,21 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = AgroGreenPrimary,
+    secondary = AgroGreenSecondary,
+    tertiary = Pink80,
+    background = AgroBackground,
+    surface = AgroSurface,
+    onPrimary = Color.Black, // Texto negro sobre botón verde neón
+    onBackground = AgroOnSurface,
+    onSurface = AgroOnSurface,
+    error = AgroError
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -29,25 +36,19 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun AgrombiaTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true, // FORZAR MODO OSCURO SIEMPRE
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Desactivar colores dinámicos para usar los nuestros
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = DarkColorScheme // Usar siempre oscuro por ahora
+    
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = AgroBackground.toArgb() // Barra estado negra
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false // Iconos blancos
         }
     }
 

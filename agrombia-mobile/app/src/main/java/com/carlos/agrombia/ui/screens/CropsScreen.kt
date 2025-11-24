@@ -83,7 +83,7 @@ fun CropsScreen(
 fun CropCard(crop: Crop, onClick: () -> Unit) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
@@ -92,11 +92,11 @@ fun CropCard(crop: Crop, onClick: () -> Unit) {
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Default.Place, contentDescription = null, tint = Color(0xFF2E7D32))
+            Icon(Icons.Default.Place, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = crop.nombre, style = MaterialTheme.typography.titleMedium)
-                Text(text = crop.tipo ?: "Sin tipo", style = MaterialTheme.typography.bodyMedium)
+                Text(text = crop.nombre, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = crop.tipo ?: "Sin tipo", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

@@ -38,7 +38,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(24.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(
                 modifier = Modifier
@@ -51,13 +51,13 @@ fun LoginScreen(
                     text = "🌿 Agrombia",
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF2E7D32) // Verde oscuro
+                        color = MaterialTheme.colorScheme.primary
                     )
                 )
                 Text(
                     text = "Bienvenido de nuevo",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -110,7 +110,6 @@ fun LoginScreen(
                             }
                         },
                         modifier = Modifier.fillMaxWidth().height(50.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32)),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text("Iniciar Sesión")

@@ -173,7 +173,7 @@ fun CropDetailScreen(
 fun TaskItem(task: Task, onDelete: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -182,18 +182,18 @@ fun TaskItem(task: Task, onDelete: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                Icon(Icons.Default.Check, contentDescription = null, tint = Color.Gray)
+                Icon(Icons.Default.Check, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
-                    Text(task.titulo, fontWeight = FontWeight.Bold)
+                    Text(task.titulo, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     if (!task.descripcion.isNullOrBlank()) {
-                        Text(task.descripcion, style = MaterialTheme.typography.bodyMedium)
+                        Text(task.descripcion, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
             
             IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
+                Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = MaterialTheme.colorScheme.error)
             }
         }
     }
