@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.carlos.agrombia.ui.screens.LoginScreen
+import com.carlos.agrombia.ui.screens.RegisterScreen
 import com.carlos.agrombia.ui.screens.HomeScreen
 
 @Composable
@@ -18,6 +19,20 @@ fun AgrombiaNavigation() {
                     navController.navigate("home") {
                         popUpTo("login") { inclusive = true }
                     }
+                },
+                onNavigateToRegister = {
+                    navController.navigate("register")
+                }
+            )
+        }
+        composable("register") {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    // Volver al login tras registrarse, o loguear directo
+                    navController.popBackStack() 
+                },
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
         }
