@@ -1,0 +1,12 @@
+# Ignorar git y configuraciones locales
+.git
+.gitignore
+.env
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar carpeta de Android (El backend no la necesita)
+agrombia-mobile/

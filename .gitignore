@@ -29,3 +29,17 @@ Thumbs.db
 # Docker
 postgres_data/
 agrombia.db
+
+# --- ANDROID ---
+.gradle/
+local.properties
+.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+agrombia-mobile/build/
+agrombia-mobile/app/build/
+agrombia-mobile/.gradle/
