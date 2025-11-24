@@ -21,3 +21,18 @@ def create_tarea(tarea_in: TareaCreate, session: Session = Depends(get_db), curr
 @router.get('/by-cultivo/{cultivo_id}')
 def tareas_by_cultivo(cultivo_id: int, session: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return session.exec(select(Task).where(Task.crop_id == cultivo_id)).all()
+
+@router.delete('/{task_id}')
+def delete_tarea(task_id: int, session: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    tarea = session.get(Task, task_id)
+    if not tarea:
+        raise HTTPException(status_code=404, detail="Tarea no encontrada")
+    
+    # Verificar que el cultivo padre pertenezca al usuario
+    crop = session.get(Crop, tarea.crop_id)
+    if not crop or crop.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="No tienes permiso para eliminar esta tarea")
+        
+    session.delete(tarea)
+    session.commit()
+    return {"ok": True}

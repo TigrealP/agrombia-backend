@@ -35,6 +35,9 @@ interface AgrombiaApi {
     @POST("tareas/")
     suspend fun createTask(@Body task: TaskCreateRequest): Task
 
+    @DELETE("tareas/{id}")
+    suspend fun deleteTask(@Path("id") taskId: Int): Any
+
     // --- ALERTAS ---
     @GET("alerts/")
     suspend fun getAlerts(): List<Alert>

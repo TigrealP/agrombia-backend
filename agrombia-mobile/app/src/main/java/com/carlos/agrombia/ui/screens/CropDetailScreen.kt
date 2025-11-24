@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -120,7 +121,16 @@ fun CropDetailScreen(
                         }
                     } else {
                         items(tasks) { task ->
-                            TaskItem(task)
+                            TaskItem(task, onDelete = {
+                                scope.launch {
+                                    try {
+                                        RetrofitClient.api.deleteTask(task.id ?: 0)
+                                        loadData() // Recargar lista
+                                    } catch (e: Exception) {
+                                        // Error
+                                    }
+                                }
+                            })
                         }
                     }
                     
@@ -190,7 +200,7 @@ fun WeatherCard(weather: WeatherResponse?) {
 }
 
 @Composable
-fun TaskItem(task: Task) {
+fun TaskItem(task: Task, onDelete: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -198,15 +208,22 @@ fun TaskItem(task: Task) {
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(Icons.Default.Check, contentDescription = null, tint = Color.Gray)
-            Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Text(task.titulo, fontWeight = FontWeight.Bold)
-                if (!task.descripcion.isNullOrBlank()) {
-                    Text(task.descripcion, style = MaterialTheme.typography.bodyMedium)
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                Icon(Icons.Default.Check, contentDescription = null, tint = Color.Gray)
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(task.titulo, fontWeight = FontWeight.Bold)
+                    if (!task.descripcion.isNullOrBlank()) {
+                        Text(task.descripcion, style = MaterialTheme.typography.bodyMedium)
+                    }
                 }
+            }
+            
+            IconButton(onClick = onDelete) {
+                Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
             }
         }
     }
