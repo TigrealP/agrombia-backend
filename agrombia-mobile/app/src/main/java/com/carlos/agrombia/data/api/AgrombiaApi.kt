@@ -1,12 +1,7 @@
 package com.carlos.agrombia.data.api
 
-import com.carlos.agrombia.data.models.TokenResponse
-import com.carlos.agrombia.data.models.UserRegisterRequest
-import com.carlos.agrombia.data.models.RegisterResponse
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import com.carlos.agrombia.data.models.*
+import retrofit2.http.*
 
 interface AgrombiaApi {
     @FormUrlEncoded
@@ -18,4 +13,36 @@ interface AgrombiaApi {
 
     @POST("auth/register")
     suspend fun register(@Body request: UserRegisterRequest): RegisterResponse
+
+    @GET("news/")
+    suspend fun getNews(): List<NewsItem>
+
+    // --- CULTIVOS ---
+    @GET("cultivos/")
+    suspend fun getMyCrops(): List<Crop>
+
+    @POST("cultivos/")
+    suspend fun createCrop(@Body crop: CropCreateRequest): Crop
+
+    // --- CLIMA ---
+    @GET("climate/crop/{id}")
+    suspend fun getCropWeather(@Path("id") cropId: Int): WeatherResponse
+
+    // --- TAREAS ---
+    @GET("tareas/by-cultivo/{id}")
+    suspend fun getTasksByCrop(@Path("id") cropId: Int): List<Task>
+
+    @POST("tareas/")
+    suspend fun createTask(@Body task: TaskCreateRequest): Task
+
+    // --- ALERTAS ---
+    @GET("alerts/")
+    suspend fun getAlerts(): List<Alert>
+
+    // --- REPORTES ---
+    @GET("reports/")
+    suspend fun getReports(): List<Report>
+
+    @POST("reports/")
+    suspend fun createReport(@Body report: ReportCreateRequest): Any
 }
