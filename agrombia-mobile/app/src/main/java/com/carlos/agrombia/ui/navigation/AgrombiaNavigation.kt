@@ -14,17 +14,28 @@ import com.carlos.agrombia.ui.screens.CreateReportScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.carlos.agrombia.ui.screens.CropDetailScreen
+import com.carlos.agrombia.ui.screens.LandingScreen
+import com.carlos.agrombia.ui.screens.PublicWeatherScreen
 
 @Composable
 fun AgrombiaNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "landing") {
+        composable("landing") {
+            LandingScreen(
+                onLoginClick = { navController.navigate("login") },
+                onWeatherClick = { navController.navigate("public_weather") }
+            )
+        }
+        composable("public_weather") {
+            PublicWeatherScreen(onBackClick = { navController.popBackStack() })
+        }
         composable("login") {
             LoginScreen(
                 onLoginSuccess = {
                     navController.navigate("main") {
-                        popUpTo("login") { inclusive = true }
+                        popUpTo("landing") { inclusive = true }
                     }
                 },
                 onNavigateToRegister = {
@@ -45,7 +56,7 @@ fun AgrombiaNavigation() {
         composable("main") {
             MainContainerScreen(
                 onLogout = {
-                    navController.navigate("login") {
+                    navController.navigate("landing") {
                         popUpTo("main") { inclusive = true }
                     }
                 },

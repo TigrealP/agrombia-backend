@@ -25,6 +25,7 @@ import com.carlos.agrombia.data.api.RetrofitClient
 import com.carlos.agrombia.data.models.Task
 import com.carlos.agrombia.data.models.TaskCreateRequest
 import com.carlos.agrombia.data.models.WeatherResponse
+import com.carlos.agrombia.ui.components.WeatherCard
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -165,37 +166,6 @@ fun CropDetailScreen(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun WeatherCard(weather: WeatherResponse?) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)), // Verde muy claro
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Clima Actual", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-            if (weather != null) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "${weather.current_weather.temperature}°C",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF2E7D32)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column {
-                        Text("Viento: ${weather.current_weather.windspeed} km/h")
-                        Text("Código: ${weather.current_weather.weathercode}")
-                    }
-                }
-            } else {
-                Text("No disponible (¿Faltan coordenadas?)", color = Color.Red)
-            }
-        }
     }
 }
 

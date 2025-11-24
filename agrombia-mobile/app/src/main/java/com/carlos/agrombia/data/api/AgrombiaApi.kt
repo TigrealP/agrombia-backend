@@ -28,6 +28,12 @@ interface AgrombiaApi {
     @GET("climate/crop/{id}")
     suspend fun getCropWeather(@Path("id") cropId: Int): WeatherResponse
 
+    @GET("climate/")
+    suspend fun getPublicWeather(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double
+    ): WeatherResponse
+
     // --- TAREAS ---
     @GET("tareas/by-cultivo/{id}")
     suspend fun getTasksByCrop(@Path("id") cropId: Int): List<Task>
