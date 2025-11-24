@@ -48,14 +48,6 @@ data class TaskCreateRequest(
     val crop_id: Int
 )
 
-// --- ALERTAS ---
-data class Alert(
-    val id: Int? = null,
-    val titulo: String?,
-    val mensaje: String,
-    val severidad: String? // Alta, Media, Baja
-)
-
 // --- REPORTES ---
 data class ReportCreateRequest(
     val tipo: String,

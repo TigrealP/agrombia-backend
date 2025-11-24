@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import init_db
-from app.routers import auth as auth_router, users as users_router, crops as crops_router, tasks as tasks_router, climate as climate_router, alerts as alerts_router, reports as reports_router, news as news_router
+from app.routers import auth as auth_router, users as users_router, crops as crops_router, tasks as tasks_router, climate as climate_router, reports as reports_router, news as news_router
 
 def create_app():
     app = FastAPI(title="Agrombia API")
@@ -18,7 +18,7 @@ def create_app():
     app.include_router(crops_router.router)
     app.include_router(tasks_router.router)
     app.include_router(climate_router.router)
-    app.include_router(alerts_router.router)
+    # app.include_router(alerts_router.router) -> Eliminado
     app.include_router(reports_router.router)
     app.include_router(news_router.router)
 

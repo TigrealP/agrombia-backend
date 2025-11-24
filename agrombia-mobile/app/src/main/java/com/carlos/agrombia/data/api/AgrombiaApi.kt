@@ -38,10 +38,6 @@ interface AgrombiaApi {
     @DELETE("tareas/{id}")
     suspend fun deleteTask(@Path("id") taskId: Int): Any
 
-    // --- ALERTAS ---
-    @GET("alerts/")
-    suspend fun getAlerts(): List<Alert>
-
     // --- REPORTES ---
     @GET("reports/")
     suspend fun getReports(): List<Report>
